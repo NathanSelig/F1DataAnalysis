@@ -23,8 +23,9 @@ def get_hybrid_circuits(filename):
     # compare circuits id from races.csv to circuit id from circuits.csv
     pass
 
-#daniels id
-DANIELID = 817
+
+# daniels id
+DANIELRICID = 817
 
 circuits = load_csv('circuits')
 results = load_csv('results')
@@ -51,10 +52,23 @@ for index, team in hybrid_era_results.iterrows():
         hybrid_era_constructors_dict.get(team['constructorId']))
 hybrid_era_results['constructorName'] = consturctor_name
 # only get races that dannyric was in ID = 817
-daniel_race_data = []
-for index,race in hybrid_era_results.iterrows():
-    if DANIELID in hybrid_era_results['driverID'].values:
-        daniel_race_data.append(race)
+daniel_race_data_list = []
+for index, race in hybrid_era_results.iterrows():
+    if DANIELRICID == race['driverId']:
+        daniel_race_data_list.append(race)
+daniel_race_data = pd.DataFrame(daniel_race_data_list)
+
+#coralation dannies best seasons to his teamsmate and constructor
+
+#when was peak dannyric
+
+#did he fall off is it him or the car compare to landos results
+
+#maybe get some qualify results to see if danny out classes his teammate
+
+
+
+
 
 
 plt.show()
