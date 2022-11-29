@@ -69,12 +69,13 @@ plt.legend(loc='upper left', bbox_to_anchor=(1.02, 1))
 def status_1_races(df):
     clean_race_status_code = 1
     df = df[df['statusId'] < 2]
-    df['statusId'].astype(float)
+    df['position'] = df['position'].astype(int)
     return(df.sort_values(by='position'))
 
 
 sns.catplot(data=status_1_races(daniel_race_data),
-            x='position', y='laps', col='constructorName')
+            x='position', y='fastestLap',
+            )
 # when was peak dannyric
 
 # did he fall off is it him or the car compare to landos results
