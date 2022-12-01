@@ -63,19 +63,35 @@ dan_fastest_lap_list = daniel_race_data['fastestLapSpeed'].to_numpy()
 plt.legend(loc='upper left', bbox_to_anchor=(1.02, 1))
 """
 # get consistentsy of his finishes standard deveation of results
-# only get races he finishes
+# col can be team
+
+#TODO why not sorting it should work
+def split_seasons(df):
+    races_in_season = []
+    season = []
+    print(hybrid_era_races)
+    hybrid_era_races.sort_values(by=['raceId'])
+    print(hybrid_era_races)
+    for i in hybrid_era_races['round']:
+        if i == 1 and len(season) > 1:
+            races_in_season.append(season)
+            season = []
+            season.append(1)
+        else:
+            season.append(i)
+    print(races_in_season)
+    df['season']
+    return df
 
 
-def status_1_races(df):
-    clean_race_status_code = 1
-    df = df[df['statusId'] < 2]
-    df['position'] = df['position'].astype(int)
-    return(df.sort_values(by='position'))
+test = split_seasons(daniel_race_data)
+""" 
+sns.violinplot(data=daniel_race_data,
+             x='position', y='constructorName', inner='box', cut=0
+               )
+"""
 
 
-sns.catplot(data=status_1_races(daniel_race_data),
-            x='position', y='fastestLap',
-            )
 # when was peak dannyric
 
 # did he fall off is it him or the car compare to landos results
