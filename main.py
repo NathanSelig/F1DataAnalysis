@@ -22,7 +22,7 @@ def get_hybrid_data(filename):
 # daniels id 817
 # lando id = 846
 # max id = 830
-SELECTEDDRIVERID = 817
+SELECTEDDRIVERID = 830
 
 circuits = load_csv('circuits')
 results = load_csv('results')
@@ -74,17 +74,22 @@ def split_seasons(df):
 
 
 daniel_race_data_with_dates = split_seasons(daniel_race_data)
-
-sns.lmplot(data=daniel_race_data_with_dates,
-           x='points', hue='constructorName',
-           )
-
-
 # when was peak dannyric
 
 # did he fall off is it him or the car compare to landos results
 
 # maybe get some qualify results to see if danny out classes his teammate
 
+# TODO: learn more about merge data does not line up
+qualli_results = load_csv('qualifying')
+qualli_results = qualli_results.merge(hybrid_era_results, on='raceId')
+
+qualli_results.rename(columns={'position_y': 'qualli_position'}, inplace=True)
+qualli_results.rename(columns={'position_x': 'finish_position'}, inplace=True)
+
+
+sns.lmplot(data=qualli_results,
+           x='qualli_position', y='finish_position'
+           )
 
 plt.show()
