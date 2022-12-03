@@ -19,8 +19,10 @@ def get_hybrid_data(filename):
     return hybrid_races
 
 
-# daniels id
-DANIELRICID = 817
+# daniels id 817
+# lando id = 846
+# max id = 830
+SELECTEDDRIVERID = 817
 
 circuits = load_csv('circuits')
 results = load_csv('results')
@@ -51,45 +53,31 @@ hybrid_era_results['constructorName'] = consturctor_name
 # only get races that dannyric was in ID = 817
 daniel_race_data_list = []
 for index, race in hybrid_era_results.iterrows():
-    if DANIELRICID == race['driverId']:
+    if SELECTEDDRIVERID == race['driverId']:
         daniel_race_data_list.append(race)
 daniel_race_data = pd.DataFrame(daniel_race_data_list)
 # coralation dannies best seasons to his teamsmate and constructor
-dan_fastest_lap_list = daniel_race_data['fastestLapSpeed'].to_numpy()
-"""sns.scatterplot(data=daniel_race_data,
-                x='raceId', y='constructorName',
-                hue=np.around(np.genfromtxt(dan_fastest_lap_list)),
-                )
-plt.legend(loc='upper left', bbox_to_anchor=(1.02, 1))
-"""
+
 # get consistentsy of his finishes standard deveation of results
 # col can be team
 
-#TODO why not sorting it should work
+
 def split_seasons(df):
-    races_in_season = []
-    season = []
-    print(hybrid_era_races)
-    hybrid_era_races.sort_values(by=['raceId'])
-    print(hybrid_era_races)
-    for i in hybrid_era_races['round']:
-        if i == 1 and len(season) > 1:
-            races_in_season.append(season)
-            season = []
-            season.append(1)
-        else:
-            season.append(i)
-    print(races_in_season)
-    df['season']
-    return df
+    sorted_races = hybrid_era_races.sort_values(by=['raceId'])
+    sorted_races.rename(columns={'name': 'race_name'}, inplace=True)
+ #   sorted_races = sorted_races[sorted_races['year'] < 2022]
+
+    results_with_dates = df.merge(sorted_races, on='raceId')
+    results_with_dates['position'] = np.genfromtxt(
+        results_with_dates['position'])
+    return results_with_dates
 
 
-test = split_seasons(daniel_race_data)
-""" 
-sns.violinplot(data=daniel_race_data,
-             x='position', y='constructorName', inner='box', cut=0
-               )
-"""
+daniel_race_data_with_dates = split_seasons(daniel_race_data)
+
+sns.lmplot(data=daniel_race_data_with_dates,
+           x='points', hue='constructorName',
+           )
 
 
 # when was peak dannyric
