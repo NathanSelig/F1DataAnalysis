@@ -92,8 +92,7 @@ qualli_results.rename(columns={'position_x': 'qualli_position'}, inplace=True)
 races_with_circuit = hybrid_era_races.merge(circuits, on='circuitId')
 qualli_results_with_races = qualli_results.merge(
     races_with_circuit, on='raceId')
-
-# want to plot qualli time from q3 at different circuits over the years cat or scatter plot
+#TODO see how teams did after daniel left them 
 sns.catplot(data=qualli_results_with_races.sort_values(by=['q3']),
             x='q3',y='qualli_position', col = 'circuitRef', col_wrap=3,hue='constructorName'
             )
