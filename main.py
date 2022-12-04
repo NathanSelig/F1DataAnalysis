@@ -22,7 +22,7 @@ def get_hybrid_data(filename):
 # daniels id 817
 # lando id = 846
 # max id = 830
-SELECTEDDRIVERID = 817
+SELECTEDDRIVERID = 830
 
 circuits = load_csv('circuits')
 results = load_csv('results')
@@ -86,17 +86,16 @@ qualli_results = pd.DataFrame([qualli_result
                                if qualli_result['driverId'] == SELECTEDDRIVERID])
 
 qualli_results = qualli_results.merge(daniel_race_data, on='raceId')
-qualli_results.rename(columns={'position_y': 'qualli_position'}, inplace=True)
-qualli_results.rename(columns={'position_x': 'finish_position'}, inplace=True)
+qualli_results.rename(columns={'position_y': 'finish_position'}, inplace=True)
+qualli_results.rename(columns={'position_x': 'qualli_position'}, inplace=True)
 
 races_with_circuit = hybrid_era_races.merge(circuits, on='circuitId')
 qualli_results_with_races = qualli_results.merge(
     races_with_circuit, on='raceId')
 
 # want to plot qualli time from q3 at different circuits over the years cat or scatter plot
-#TODO sort q3 so it is easeir to read
-sns.catplot(data=qualli_results_with_races,
-            x='q3', col = 'circuitRef', col_wrap=3
+sns.catplot(data=qualli_results_with_races.sort_values(by=['q3']),
+            x='q3',y='qualli_position', col = 'circuitRef', col_wrap=3,hue='constructorName'
             )
 
 
