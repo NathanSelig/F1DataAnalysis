@@ -92,10 +92,22 @@ qualli_results.rename(columns={'position_x': 'qualli_position'}, inplace=True)
 races_with_circuit = hybrid_era_races.merge(circuits, on='circuitId')
 qualli_results_with_races = qualli_results.merge(
     races_with_circuit, on='raceId')
-#TODO see how teams did after daniel left them 
-sns.catplot(data=qualli_results_with_races.sort_values(by=['q3']),
-            x='q3',y='qualli_position', col = 'circuitRef', col_wrap=3,hue='constructorName'
-            )
+# TODO see how teams did after daniel left them
+constructor_standings = load_csv('constructor_standings')
 
+constructor_standings_specific = pd.DataFrame([standing
+                                               for index, standing in constructor_standings.iterrows()
+                                               if standing['raceId'] in hybrid_era_races['raceId']
+                                               ])
+
+
+constructor_standings_specific = constructor_standings_specific.merge(
+    hybrid_era_constructors, on='constructorId')
+
+constructor_standings_and_driver_results = constructor_standings_specific.merge(
+    qualli_results_with_races, on='raceId')
+
+g = sns.FacetGrid(constructor_standings_and_driver_results, col="name",col_wrap=4 )
+g.map_dataframe(sns.lineplot, x="year", y='wins')
 
 plt.show()
